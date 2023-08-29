@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Obligatorio2.Models.Compra>
+
+@{
+    ViewData["Title"] = "MisCompras";
+}
+
+<h1>Mis Compras</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                Actividad
+            </th>
+            <th>
+                Cantidad de Entradas
+            </th>
+            <th>
+                Fecha y Hora
+            </th>
+            <th>
+                Costo Total
+            </th>
+            <th>
+                Estado
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Actividad.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CantidadEntradas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechayHora)
+            </td>
+            <td>
+                @item.PrecioFinal()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstadoCompra)
+            </td>
+            @if (item.EstadoCompra == "Activa" && DateTime.Now.AddHours(24) <= item.Actividad.FechayHora)
+            {
+                <td>
+                    @Html.ActionLink("Cancelar Compra", "CancelarCompra", new { idCompra = item.Id }) |
+                </td>
+            }
+
+        </tr>
+}
+    </tbody>
+</table>

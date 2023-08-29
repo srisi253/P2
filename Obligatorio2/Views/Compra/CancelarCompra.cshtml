@@ -1,0 +1,65 @@
+﻿
+
+<h1>Cancelar Compra</h1>
+
+<br />
+
+<form method="post" id="cancelarCompra">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Actividad
+                </th>
+                <th>
+                    Cantidad de Entradas
+                </th>
+                <th>
+                    Fecha y Hora
+                </th>
+                <th>
+                    Costo Total
+                </th>
+                <th>
+                    Estado
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td name="idCompra">
+                    @ViewBag.CompraCancelar.Id
+                </td>
+                <td>
+                    @ViewBag.CompraCancelar.Actividad.Nombre
+                </td>
+                <td>
+                    @ViewBag.CompraCancelar.CantidadEntradas
+                </td>
+                <td>
+                    @ViewBag.CompraCancelar.FechayHora
+                </td>
+                <td>
+                    @ViewBag.CompraCancelar.PrecioFinal()
+                </td>
+                <td name="estadoCompra">
+                    @ViewBag.CompraCancelar.EstadoCompra
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Está seguro que desea cancelar esta compra?</p> <br />
+
+    <input type="submit" value="Cancelar Compra">
+
+</form>
+<br />
+<div>
+    <a asp-action="MisCompras">Volver a Mis Compras</a>
+</div>

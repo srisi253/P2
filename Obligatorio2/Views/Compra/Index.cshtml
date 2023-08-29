@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Obligatorio2.Models.Compra>
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de Compras del Sistema</h1>
+
+@if (Context.Session.GetString("logueadoRol") == "admin")
+{
+    <form method="post" id="comprasPorFecha">
+        <label>Fecha Inicial</label>
+        <input type="date" name="fechaInicial" id="f1" />
+
+        <label>Fecha Final</label>
+        <input type="date" name="fechaFinal" id="f2" />
+
+        <input type="submit" value="Ver Compras Entre Fechas" />
+    </form>
+}
+
+<br />
+<p id="pMensaje"></p>
+@ViewBag.Mensaje
+<br />
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+                Compra
+            </th>
+            <th>
+                Actividad
+            </th>
+            <th>
+                Usuario
+            </th>
+            <th>
+                Cantidad de Entradas
+            </th>
+            <th>
+                Fecha y Hora
+            </th>
+            <th>
+                Costo
+            </th>
+            <th>
+                Estado
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Actividad.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Usuario.Id)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadEntradas)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechayHora)
+                </td>
+                <td>
+                    @item.PrecioFinal()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstadoCompra)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script>
+
+        document.querySelector("#comprasPorFecha").addEventListener('submit', validarFormulario);
+        document.querySelector("#pMensaje").innerHTML = "";
+
+
+        function validarFormulario(evento) {
+            evento.preventDefault();
+
+            let f1 = document.querySelector("#f1").value
+
+            let f2 = document.querySelector("#f2").value
+
+            if (f1 != "" && f2 != "") {
+                if (f1 <= f2) {
+                    this.submit();
+                } else {
+                    document.querySelector("#pMensaje").innerHTML = "La fecha final debe ser posterior a la inicial";
+                }
+            }else {
+                document.querySelector("#pMensaje").innerHTML = "Seleccione fechas";
+            }
+
+        }
+
+    </script>
+}

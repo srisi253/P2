@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bienvenido al sitio de venta de entradas</h1>
+    <p>Aquí podrá comprar entradas para tus espectáculos y eventos favoritos</p>
+</div>
+
+
+@if (Context.Session.GetString("logueadoNombre") != null)
+{
+
+    <p>Bienvenido/a @Context.Session.GetString("logueadoNombre")</p>
+}
+else
+{
+    <p>Para comenzar inicie sesión</p>
+}

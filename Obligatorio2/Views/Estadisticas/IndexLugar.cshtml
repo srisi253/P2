@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Obligatorio2.Models.Actividad>
+
+@{
+    ViewData["Title"] = "IndexLugar";
+}
+
+<h1>Estadísticas</h1>
+<br />
+<br />
+
+<p>Actividades filtradas por lugar</p>
+
+@using (Html.BeginForm("IndexLugar", "Estadisticas", FormMethod.Post, new { id = "actividadesLugar" }))
+{
+
+    <label for="lugar">Lugar</label>
+    <select name="lugar" id="lugar">
+        <option value="">Seleccione un lugar...</option>
+        <option value="Estadio Centenario"> Estadio Centenario</option>
+        <option value="Teatro de verano"> Teatro de verano </option>
+        <option value="Plaza de los artesanos"> Plaza de los artesanos </option>
+        <option value="Teatro Sodre">Teatro Sodre </option>
+        <option value="Antel Arena"> Antel Arena </option>
+        <option value="Cine Movie Portones"> Cine Movie Portones </option>
+    </select>
+
+    <input type="submit" value="Ver Actividades en Lugar" />
+    <br />
+    <br />
+
+}
+
+<p id="pMensaje1"></p>
+@ViewBag.Mensaje
+<br />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechayHora)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.EdadMinima)
+            </th>
+            <th>
+                Precio
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadLikes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechayHora)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdadMinima)
+                </td>
+                <td>
+                    @item.CalcularPrecioEntrada()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadLikes)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+
+
+<div>
+    <a asp-action="Index">Volver a Estadísticas</a>
+</div>
+
+
+
+@section Scripts{
+    <script>
+
+        document.querySelector("#actividadesLugar").addEventListener('submit', validarFormulario1);
+        document.querySelector("#pMensaje1").innerHTML = "";
+
+
+        function validarFormulario1(evento) {
+            evento.preventDefault();
+
+            let lugar = document.querySelector("#lugar").value
+
+            if (lugar != "") {
+                this.submit();
+
+            } else {
+                document.querySelector("#pMensaje1").innerHTML = "Seleccione un lugar";
+
+            }
+
+        }
+
+    </script>
+}

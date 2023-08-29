@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<Obligatorio2.Models.Actividad>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Actividades</h1>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    Lugar
+                </th>
+                <th>
+                    Fecha y Hora
+                </th>
+
+                <th>
+                    Edad Mínima
+                </th>
+                <th>
+                    Precio
+                </th>
+                <th>
+                    Cantidad de Likes
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lugar.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechayHora)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdadMinima)
+                </td>
+                <td>
+                    @item.CalcularPrecioEntrada()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadLikes)
+                </td>
+                
+                @if (Context.Session.GetString("logueadoRol") == "cliente")
+                    {
+                        <td>
+                            @Html.ActionLink("Me Gusta", "MeGusta", new { idActividad = item.Id }) |
+                        </td>
+                        @if (item.FechayHora > DateTime.Now)
+                        {
+                            <td>
+                                @Html.ActionLink("Comprar Entradas", "ComprarEntrada", new { idActividad = item.Id }) |
+                            </td>
+                        }
+
+                    }
+               
+
+            </tr>
+            }
+        </tbody>
+    </table>

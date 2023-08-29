@@ -1,0 +1,248 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<Obligatorio2.Models.Actividad>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Estadísticas</h1>
+<br />
+
+<h3>Actividades filtradas por lugar</h3>
+
+@using (Html.BeginForm("IndexLugar", "Estadisticas", FormMethod.Post, new { id = "actividadesLugar" }))
+{
+
+    <label for="lugar">Lugar</label>
+    <select name="lugar" id="lugar">
+        <option value="">Seleccione un lugar...</option>
+        <option value="Estadio Centenario"> Estadio Centenario</option>
+        <option value="Teatro de verano"> Teatro de verano </option>
+        <option value="Plaza de los artesanos"> Plaza de los artesanos </option>
+        <option value="Teatro Sodre">Teatro Sodre </option>
+        <option value="Antel Arena"> Antel Arena </option>
+        <option value="Cine Movie Portones"> Cine Movie Portones </option>
+    </select>
+
+    <input type="submit" value="Ver Actividades en Lugar"  />
+    <br />
+    <br />
+
+}
+
+<p id="pMensaje1"></p>
+
+<br />
+
+
+<h3>Actividades filtradas por fecha y categoría</h3>
+<br />
+
+@using (Html.BeginForm("IndexFechasCategoria", "Estadisticas", FormMethod.Post, new { id = "actividadesCatFechas" }))
+{
+
+    <label>Fecha Inicial</label>
+    <input type="date" name="fechaInicial" id="f1" />
+
+    <label>Fecha Final</label>
+    <input type="date" name="fechaFinal" id="f2" />
+
+    <label for="categoria">Categoria</label>
+    <select name="categoria" id="cat">
+        <option value="" selected> Seleccione una categoría</option>
+        <option value="Cine"> Cine </option>
+        <option value="Teatro"> Teatro </option>
+        <option value="Feria gastronomica"> Feria Gastronómica </option>
+        <option value="Concierto"> Concierto </option>
+        <option value="Deportivo"> Deportivo </option>
+    </select>
+    <br />
+
+    <input type="submit" value="Ver Actividades de Categoria Entre Fechas" />
+
+}
+<br />
+<p id="pMensaje2"></p>
+@ViewBag.Mensaje
+<br />
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechayHora)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.EdadMinima)
+            </th>
+            <th>
+                Precio
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadLikes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechayHora)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdadMinima)
+                </td>
+                <td>
+                    @item.CalcularPrecioEntrada()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadLikes)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+
+
+<h3>Compras de mayor valor</h3>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+                Compra
+            </th>
+            <th>
+                Actividad
+            </th>
+            <th>
+                Usuario
+            </th>
+            <th>
+                Cantidad de Entradas
+            </th>
+            <th>
+                Fecha y Hora
+            </th>
+            <th>
+                Costo
+            </th>
+            <th>
+                Estado
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Compra c in Sistema.GetInstancia().ComprasMayorValor())
+        {
+        <tr>
+            <td>
+                @c.Id
+            </td>
+            <th>
+                @c.Actividad.Nombre
+            </th>
+            <th>
+                @c.Usuario.Id
+            </th>
+            <td>
+                @c.CantidadEntradas
+            </td>
+            <td>
+                @c.FechayHora
+            </td>
+            <td>
+                @c.PrecioFinal()
+            </td>
+            <td>
+                @c.EstadoCompra
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script>
+
+        document.querySelector("#actividadesCatFechas").addEventListener('submit', validarFormulario2);
+        document.querySelector("#pMensaje2").innerHTML = "";
+
+
+        function validarFormulario2(evento) {
+            evento.preventDefault();
+
+            let f1 = document.querySelector("#f1").value
+
+            let f2 = document.querySelector("#f2").value
+
+            let cat = document.querySelector("#cat").value
+
+
+            if (f1 != "" && f2 != "") {
+                if (f1 <= f2) {
+                    if (cat != "") {
+                        this.submit();
+
+                    } else {
+                        document.querySelector("#pMensaje2").innerHTML = "Seleccione una categoría";
+
+                    }
+
+                } else {
+                    document.querySelector("#pMensaje2").innerHTML = "La fecha final debe ser posterior a la inicial";
+                }
+
+            } else {
+                document.querySelector("#pMensaje2").innerHTML = "Seleccione fechas";
+            }
+
+        }
+
+        document.querySelector("#actividadesLugar").addEventListener('submit', validarFormulario1);
+        document.querySelector("#pMensaje1").innerHTML = "";
+
+
+        function validarFormulario1(evento) {
+            evento.preventDefault();
+
+            let lugar = document.querySelector("#lugar").value
+
+            if (lugar != "") {
+                    this.submit();
+
+                } else {
+                    document.querySelector("#pMensaje1").innerHTML = "Seleccione un lugar";
+
+                }
+
+        }
+
+    </script>
+}

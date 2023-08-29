@@ -1,0 +1,89 @@
+﻿
+<h1>Registro usuario</h1>
+
+<form method="post" id="formularioAlta">
+    <label>Nombre</label>
+    <input type="text" name="nombre" id="nombre" />
+    <i>Debe contener al menos dos caracteres</i>
+    <br />
+
+    <label>Apellido</label>
+    <input type="text" name="apellido" id="apellido" />
+    <i>Debe contener al menos dos caracteres</i>
+    <br />
+
+    <label>Fecha de Nacimiento:</label>
+    <input type="date" name="fechaNacimiento" id="fechaNacimiento" /><br />
+
+    <label>Email</label>
+    <input type="text" name="email" id="email" /><br />
+
+    <label>Nombre de Usuario</label>
+    <input type="text" name="nombreUsuario" id="nombreUsuario" /><br />
+
+    <label>Password</label>
+    <input type="password" name="password" id="password" />
+    <i>Debe contener al menos una mayúscula, una minúscula, un dígito y más de 5 caracteres</i>
+    <br />
+
+    <input type="submit" value="Registrar" />
+</form>
+
+@ViewBag.Resultado
+
+<p id="pMensaje"></p>
+
+@section Scripts{
+    <script>
+
+        document.querySelector("#formularioAlta").addEventListener('submit', validarFormulario);
+        document.querySelector("#pMensaje").innerHTML = "";
+
+
+        function validarFormulario(evento) {
+            evento.preventDefault();
+
+            let nombre = document.querySelector("#nombre").value
+
+            let apellido = document.querySelector("#apellido").value
+
+            let email = document.querySelector("#email").value
+
+            let password = document.querySelector("#password").value
+
+            let nombreUsuario = document.querySelector("#nombreUsuario").value
+
+            let fechaNac = document.querySelector("#fechaNacimiento").value
+
+
+            if (nombre != "" && apellido != "" && email != "" && password != "" && nombreUsuario != "" && fechaNac != ""
+                && nombre.length > 1 && apellido.length > 1 && password.length > 5) {
+                        let mayusc = 0;
+                        let minusc = 0;
+                        let digito = 0;
+                        for (var i = 0; i < password.length; i++) {
+                            
+                            if (password.charCodeAt(i) >= 48 && password.charCodeAt(i) <= 57) {
+                                digito++;
+                            } else if (password.charAt(i) == password.charAt(i).toUpperCase()) {
+                                mayusc++;
+                            } else if (password.charAt(i) == password.charAt(i).toLowerCase()) {
+                                minusc;
+                            }
+                        }
+              
+                if (mayusc > 0 && minusc > 0 && digito > 0) {
+                    this.submit();
+                } else {
+                    document.querySelector("#pMensaje").innerHTML = "Error en password, la contraseña debe contener más de 5 caracteres y al menos una minúscula, una mayúscula y un dígito";
+                }
+             
+                
+            } else {
+                document.querySelector("#pMensaje").innerHTML = "Error. Verificar que se hayan completado todos los campos";
+            }
+
+        }
+
+    </script>
+}

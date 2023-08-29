@@ -1,0 +1,141 @@
+﻿@model IEnumerable<Obligatorio2.Models.Actividad>
+
+@{
+    ViewData["Title"] = "IndexFechasCategoria";
+}
+
+<p>Actividades filtradas por fecha y categoría</p>
+<br />
+
+@using (Html.BeginForm("IndexFechasCategoria", "Estadisticas", FormMethod.Post, new { id = "actividadesCatFechas" }))
+{
+
+    <label>Fecha Inicial</label>
+    <input type="date" name="fechaInicial" id="f1" />
+
+    <label>Fecha Final</label>
+    <input type="date" name="fechaFinal" id="f2" />
+
+    <label for="categoria">Categoria</label>
+    <select name="categoria" id="cat">
+        <option value="" selected> Seleccione una categoría</option>
+        <option value="Cine"> Cine </option>
+        <option value="Teatro"> Teatro </option>
+        <option value="Feria gastronomica"> Feria Gastronómica </option>
+        <option value="Concierto"> Concierto </option>
+        <option value="Deportivo"> Deportivo </option>
+    </select>
+    <br />
+
+    <input type="submit" value="Ver Actividades de Categoria Entre Fechas" />
+
+}
+<br />
+<p id="pMensaje2"></p>
+@ViewBag.Mensaje
+<br />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechayHora)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.EdadMinima)
+            </th>
+            <th>
+                Precio
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadLikes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechayHora)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdadMinima)
+                </td>
+                <td>
+                    @item.CalcularPrecioEntrada()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadLikes)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+
+<div>
+    <a asp-action="Index">Volver a Estadísticas</a>
+</div>
+
+
+
+@section Scripts{
+    <script>
+
+        document.querySelector("#actividadesCatFechas").addEventListener('submit', validarFormulario2);
+        document.querySelector("#pMensaje2").innerHTML = "";
+
+
+        function validarFormulario2(evento) {
+            evento.preventDefault();
+
+            let f1 = document.querySelector("#f1").value;
+
+            let f2 = document.querySelector("#f2").value;
+
+            let cat = document.querySelector("#cat").value;
+
+            
+            if (f1 != "" && f2 != "") {
+                if (f1 <= f2) {
+                    if (cat != "") {
+                        this.submit();
+
+                    } else {
+                        document.querySelector("#pMensaje2").innerHTML = "Seleccione una categoría";
+
+                    }
+
+                } else {
+                    document.querySelector("#pMensaje2").innerHTML = "La fecha final debe ser posterior a la inicial";
+                }
+
+            } else {
+                document.querySelector("#pMensaje2").innerHTML = "Seleccione fechas";
+            }
+           
+
+        }
+
+
+    </script>
+}

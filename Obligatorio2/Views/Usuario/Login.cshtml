@@ -1,0 +1,44 @@
+﻿<h1>Login</h1>
+
+
+
+<form method="post" id="formularioLogin">
+
+    <label>Nombre de Usuario:</label><br>
+    <input type="text" name="nombreUsuario" id="nombreUsuario" ><br>
+    <label>Password</label><br>
+    <input type="password" name="password" id="password" ><br>
+    <input type="submit" value="Login">
+
+</form>
+
+@ViewBag.Resultado
+<p id="pMensaje"></p>
+
+
+@section Scripts{
+    <script>
+
+        document.querySelector("#formularioLogin").addEventListener('submit', validarFormulario);
+        document.querySelector("#pMensaje").innerHTML = "";
+
+
+        function validarFormulario(evento) {
+            evento.preventDefault();
+
+            let password = document.querySelector("#password").value
+
+            let nombreUsuario = document.querySelector("#nombreUsuario").value
+
+
+            if (password != "" && nombreUsuario != "") {
+                this.submit();
+
+            } else {
+                document.querySelector("#pMensaje").innerHTML = "Completar campos";
+            }
+
+        }
+
+    </script>
+}

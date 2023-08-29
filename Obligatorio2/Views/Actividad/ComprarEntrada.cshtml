@@ -1,0 +1,84 @@
+﻿@model Obligatorio2.Models.Compra
+
+@{
+    ViewData["Title"] = "ComprarEntrada";
+}
+
+<h1>Comprar Entrada para @ViewBag.ActividadComprar.Nombre </h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ComprarEntrada" id="comprarEntrada">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Actividad.Id" class="control-label">Id Actividad</label>
+                <input asp-for="Actividad.Id" class="form-control" name="idActividad" value="@ViewBag.ActividadComprar.Id" readonly />
+                <span asp-validation-for="Actividad.Id" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Actividad.Id" class="control-label">Precio por Entrada</label>
+                <input asp-for="Actividad.Id" class="form-control" name="precioEntrada" value="@ViewBag.ActividadComprar.CalcularPrecioEntrada()" readonly />
+                <span asp-validation-for="Actividad.Id" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CantidadEntradas" class="control-label">Cantidad de Entradas</label>
+                <input asp-for="CantidadEntradas" class="form-control" name="CantidadEntradas" id="cantidadEntradas" />
+                <span asp-validation-for="CantidadEntradas" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Comprar Entradas" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@ViewBag.Resultado
+
+<p id="pMensaje"></p>
+
+<div>
+    <a asp-action="Index">Volver a la Lista de Actividades</a>
+</div>
+
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+
+
+            document.querySelector("#comprarEntrada").addEventListener('submit', validarFormulario);
+            document.querySelector("#pMensaje").innerHTML = "";
+
+
+
+            function validarFormulario(evento) {
+                evento.preventDefault();
+
+                let entradas = document.querySelector("#cantidadEntradas").value
+
+                if (entradas > 0) {
+                    if (entradas > 100) {
+                        document.querySelector("#pMensaje").innerHTML = "Ingrese un número menor que 100";
+                    } else {
+                        this.submit();
+                    }
+
+                } else {
+                    document.querySelector("#pMensaje").innerHTML = "Ingrese cantidad de entradas";
+                }
+
+            }
+
+        </script>
+    }
+}
+
